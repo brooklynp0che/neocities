@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <link rel = "icon" href = "/assets/hkbubble.gif">
+    <title>brookiebug's neocities</title>
+    <script type="text/javascript">
+// <![CDATA[
+var colour= "#FF6BB0"; 
+var sparkles=50;
+
+var x=ox=400;
+var y=oy=300;
+var swide=800;
+var shigh=600;
+var sleft=sdown=0;
+var tiny=new Array();
+var star=new Array();
+var starv=new Array();
+var starx=new Array();
+var stary=new Array();
+var tinyx=new Array();
+var tinyy=new Array();
+var tinyv=new Array();
+
+window.onload=function() { if (document.getElementById) {
+  var i, rats, rlef, rdow;
+  for (var i=0; i<sparkles; i++) {
+    var rats=createDiv(3, 3);
+    rats.style.visibility="hidden";
+    rats.style.zIndex="999";
+    document.body.appendChild(tiny[i]=rats);
+    starv[i]=0;
+    tinyv[i]=0;
+    var rats=createDiv(5, 5);
+    rats.style.backgroundColor="transparent";
+    rats.style.visibility="hidden";
+    rats.style.zIndex="999";
+    var rlef=createDiv(1, 5);
+    var rdow=createDiv(5, 1);
+    rats.appendChild(rlef);
+    rats.appendChild(rdow);
+    rlef.style.top="2px";
+    rlef.style.left="0px";
+    rdow.style.top="0px";
+    rdow.style.left="2px";
+    document.body.appendChild(star[i]=rats);
+  }
+  set_width();
+  sparkle();
+}}
+
+function sparkle() {
+  var c;
+  if (Math.abs(x-ox)>1 || Math.abs(y-oy)>1) {
+    ox=x;
+    oy=y;
+    for (c=0; c<sparkles; c++) if (!starv[c]) {
+      star[c].style.left=(starx[c]=x)+"px";
+      star[c].style.top=(stary[c]=y+1)+"px";
+      star[c].style.clip="rect(0px, 5px, 5px, 0px)";
+      star[c].childNodes[0].style.backgroundColor=star[c].childNodes[1].style.backgroundColor=(colour=="random")?newColour():colour;
+      star[c].style.visibility="visible";
+      starv[c]=50;
+      break;
+    }
+  }
+  for (c=0; c<sparkles; c++) {
+    if (starv[c]) update_star(c);
+    if (tinyv[c]) update_tiny(c);
+  }
+  setTimeout("sparkle()", 40);
+}
+
+function update_star(i) {
+  if (--starv[i]==25) star[i].style.clip="rect(1px, 4px, 4px, 1px)";
+  if (starv[i]) {
+    stary[i]+=1+Math.random()*3;
+    starx[i]+=(i%5-2)/5;
+    if (stary[i]<shigh+sdown) {
+      star[i].style.top=stary[i]+"px";
+      star[i].style.left=starx[i]+"px";
+    }
+    else {
+      star[i].style.visibility="hidden";
+      starv[i]=0;
+      return;
+    }
+  }
+  else {
+    tinyv[i]=50;
+    tiny[i].style.top=(tinyy[i]=stary[i])+"px";
+    tiny[i].style.left=(tinyx[i]=starx[i])+"px";
+    tiny[i].style.width="2px";
+    tiny[i].style.height="2px";
+    tiny[i].style.backgroundColor=star[i].childNodes[0].style.backgroundColor;
+    star[i].style.visibility="hidden";
+    tiny[i].style.visibility="visible"
+  }
+}
+
+function update_tiny(i) {
+  if (--tinyv[i]==25) {
+    tiny[i].style.width="1px";
+    tiny[i].style.height="1px";
+  }
+  if (tinyv[i]) {
+    tinyy[i]+=1+Math.random()*3;
+    tinyx[i]+=(i%5-2)/5;
+    if (tinyy[i]<shigh+sdown) {
+      tiny[i].style.top=tinyy[i]+"px";
+      tiny[i].style.left=tinyx[i]+"px";
+    }
+    else {
+      tiny[i].style.visibility="hidden";
+      tinyv[i]=0;
+      return;
+    }
+  }
+  else tiny[i].style.visibility="hidden";
+}
+
+document.onmousemove=mouse;
+function mouse(e) {
+  if (e) {
+    y=e.pageY;
+    x=e.pageX;
+  }
+  else {
+    set_scroll();
+    y=event.y+sdown;
+    x=event.x+sleft;
+  }
+}
+
+window.onscroll=set_scroll;
+function set_scroll() {
+  if (typeof(self.pageYOffset)=='number') {
+    sdown=self.pageYOffset;
+    sleft=self.pageXOffset;
+  }
+  else if (document.body && (document.body.scrollTop || document.body.scrollLeft)) {
+    sdown=document.body.scrollTop;
+    sleft=document.body.scrollLeft;
+  }
+  else if (document.documentElement && (document.documentElement.scrollTop || document.documentElement.scrollLeft)) {
+    sleft=document.documentElement.scrollLeft;
+    sdown=document.documentElement.scrollTop;
+  }
+  else {
+    sdown=0;
+    sleft=0;
+  }
+}
+
+window.onresize=set_width;
+function set_width() {
+  var sw_min=999999;
+  var sh_min=999999;
+  if (document.documentElement && document.documentElement.clientWidth) {
+    if (document.documentElement.clientWidth>0) sw_min=document.documentElement.clientWidth;
+    if (document.documentElement.clientHeight>0) sh_min=document.documentElement.clientHeight;
+  }
+  if (typeof(self.innerWidth)=='number' && self.innerWidth) {
+    if (self.innerWidth>0 && self.innerWidth<sw_min) sw_min=self.innerWidth;
+    if (self.innerHeight>0 && self.innerHeight<sh_min) sh_min=self.innerHeight;
+  }
+  if (document.body.clientWidth) {
+    if (document.body.clientWidth>0 && document.body.clientWidth<sw_min) sw_min=document.body.clientWidth;
+    if (document.body.clientHeight>0 && document.body.clientHeight<sh_min) sh_min=document.body.clientHeight;
+  }
+  if (sw_min==999999 || sh_min==999999) {
+    sw_min=800;
+    sh_min=600;
+  }
+  swide=sw_min;
+  shigh=sh_min;
+}
+
+function createDiv(height, width) {
+  var div=document.createElement("div");
+  div.style.position="absolute";
+  div.style.height=height+"px";
+  div.style.width=width+"px";
+  div.style.overflow="hidden";
+  return (div);
+}
+
+function newColour() {
+  var c=new Array();
+  c[0]=255;
+  c[1]=Math.floor(Math.random()*256);
+  c[2]=Math.floor(Math.random()*(256-c[1]/2));
+  c.sort(function(){return (0.5 - Math.random());});
+  return ("rgb("+c[0]+", "+c[1]+", "+c[2]+")");
+}
+// ]]>
+</script>
+        <style>
+
+        @font-face {                  
+            font-family: 'CHNOPixel';
+            src: url(https://humantooth.neocities.org/fonts/CHNOPixelCodePro-Regular.woff) format('woff');}
+
+        html{
+            overflow: scroll;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 0;
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: transparent;
+        }
+
+        ::selection {
+            background: #d5f0bb;
+            color:#b55d64;
+            opacity: 50%;
+        }
+
+        body {
+            background-image: url('/assets/bg.png');
+            background-size: cover;
+            background-attachment: fixed;
+            height: 100%;
+            width: 100%;
+            margin: 0;  
+            background-position: center;        
+        }
+
+        .maincontainer {
+            border-width: 7px;
+            border-style: solid;
+            border-image: url("https://i.imgur.com/FsgoCPW.png") 7 fill round; 
+            width: 750px;
+            height: 700px;   
+            position: relative;
+            margin: auto;
+            padding: 7px;
+            z-index: 0;
+        }
+
+        .abtmecontainer{
+            width: 550px;
+            height: 500px;
+            background: url('/assets/abtme.jpg');
+            position: relative;
+            border-radius: 24px;
+            padding: 7px;
+            z-index: 1;
+            margin: 0 auto;
+            transform: translate(12%, -260%);
+            overflow-y: scroll;
+            white-space: nowrap;
+
+        }
+
+        .headercontainerland {
+            width: 720px;
+            height: 90px;
+            z-index: 1;
+            background: url('/assets/flowertopcontainer.jpg');
+            border-radius: 24px;
+            padding: 7px;
+            text-align: center;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction:column; 
+            transform: translateY(-700px);
+        }
+
+        .headercontainerbook {
+            width: 720px;
+            height: 90px;
+            position: relative;
+            z-index: 1;
+            background: url('/assets/lilytopcontainer.jpg');
+            border-radius: 24px;
+            padding: 7px;
+            text-align: center;
+            transform: translate(50px,-770px);
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(-700px);
+        }
+
+        .bookcontainer {
+            width: 550px;
+            height: 500px;
+            background: url('/assets/bookcontainer.jpg');
+            position: relative;
+            border-radius: 24px;
+            padding: 7px;
+            z-index: 1;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            transform: translate(75px, -675px);
+            overflow-y: scroll;
+        }
+
+        #bookimg1 {
+            width: 180px;
+            height: 255px;
+            background-size: cover;
+            background-color: transparent;
+            border-radius: 12px;
+            border: none;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            filter: opacity(75%);
+            z-index: 2;
+            transform: translateX(-180px);
+        }
+
+        #bookimg1:hover {
+            filter: opacity(100%)
+        }
+
+        #bookrating1 {
+            width: 350px;
+            height: 225px;
+            text-align: left;
+            position: relative;
+            z-index: 2;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            background:#efd0d5;
+            color:#46292b;
+            font-family: 'CHNOPixel';
+            border-radius: 24px;
+            transform: translate(95px, -240px);
+            overflow-y: scroll;
+            padding: 7px;
+
+        }
+
+        .headercontainerinterests {
+            width: 720px;
+            height: 90px;
+            position: relative;
+            z-index: 1;
+            background: url('/assets/pinkappletopcontainer.jpg');
+            border-radius: 24px;
+            padding: 7px;
+            text-align: center;
+            transform: translate(50px,-770px);
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(-700px);
+
+        }
+
+        .interestscontainer {
+            width: 550px;
+            height: 500px;
+            background: #ffffff;
+            position: relative;
+            padding: 7px;
+            z-index: 1;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            overflow-y: scroll;
+            transform: translate(75px, -675px);
+        }
+
+        .over {
+            background: #FE82B624;
+            -webkit-mask-image: url(https://i.imgur.com/1PjqQS6.png);
+            -webkit-mask-size: 200%;
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-position: center;  
+        }
+
+        #tadcint {
+            width: 200px;
+            height: 200px;
+            background-size: cover;
+            background-color: transparent;
+            margin: 0 auto;
+            display: felx;
+            flex-direction: column;
+            z-index: 2;
+            transform: translateX(-140px);
+        }
+
+        #tadcbutton {
+            font-family: "CHNOPixel";
+            background-color:#ddf6cd;
+            border-radius: 24px;
+            color:#714a4c;
+            z-index: 3;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            border-color:#714a4c;
+            transform: translate(-140px, -1150px);
+        }
+
+        #ladybugint {
+            width: 200px;
+            height: 200px;
+            background-size: cover;
+            background-color: transparent;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            z-index: 2;
+            transform: translate(140px, -200px);
+        }
+
+        #ladybugbutton {
+            font-family: "CHNOPixel";
+            background-color: #ddf6cd;
+            border-radius: 24px;
+            color:#714a4c;
+            z-index: 3;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            border-color:#714a4c;
+            transform: translate(140px, -1175px);
+        }
+
+        #snoopyint {
+            width: 200px;
+            height: 200px;
+            background-size: cover;
+            background-color: transparent;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            z-index: 2;
+            transform: translate(-140px, -175px);
+        }
+
+        #snoopybutton {
+            font-family: "CHNOPixel";
+            background-color: #ddf6cd;
+            border-radius: 24px;
+            color:#714a4c;
+            z-index: 3;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            border-color:#714a4c;
+            transform: translate(-140px, -975px);
+        }
+
+        #STEMint {
+            width: 200px;
+            height: 200px;
+            background-size: cover;
+            background-color: transparent;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            z-index: 2;
+            transform: translate(140px, -375px);
+
+        }
+
+        #STEMbutton {
+            font-family: "CHNOPixel";
+            background-color: #ddf6cd;
+            border-radius: 24px;
+            color: #714a4c;
+            z-index: 3;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            border-color:#714a4c;
+            transform: translate(135px, -1000px);
+        }
+
+        #artint {
+            width: 200px;
+            height: 200px;
+            background-size: cover;
+            background-color: transparent;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            z-index: 2;
+            transform: translate(-140px, -325px);
+        }
+
+        #artbutton {
+            font-family: "CHNOPixel";
+            background-color: #ddf6cd;
+            border-radius: 24px;
+            color:#714a4c;
+            z-index: 3;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            border-color:#714a4c;
+            transform: translate(-145px, -785px);
+        }
+
+        #evaint {
+            width: 200px;
+            height: 200px;
+            background-size: cover;
+            background-color: transparent;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            z-index: 2;
+            transform: translate(140px, -525px);
+        }
+
+        #evabutton {
+            font-family: "CHNOPixel";
+            background-color: #ddf6cd;
+            border-radius: 24px;
+            color:#714a4c;
+            z-index: 3;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            border-color:#714a4c;
+            transform: translate(140px, -815px);
+        }
+
+        #musicint {
+            width: 200px;
+            height: 200px;
+            background-size: cover;
+            background-color: transparent;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            z-index: 2;
+            transform: translate(-140px, -450px);
+        }
+
+        #musicbutton {
+            font-family: "CHNOPixel";
+            background-color: #ddf6cd;
+            border-radius: 24px;
+            color:#714a4c;
+            z-index: 3;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            border-color:#714a4c;
+            transform: translate(-140px, -600px);
+        }
+
+        .headercontainerprojects {
+            width: 720px;
+            height: 90px;
+            position: relative;
+            z-index: 1;
+            background: url('/assets/circuttopcontainer1.jpg');
+            border-radius: 24px;
+            padding: 7px;
+            text-align: center;
+            transform: translate(50px,-770px);
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(-700px);
+        }
+
+        .socialscontainerland {
+            width: 111px;
+            height: 255px;
+            background: url('/assets/socialscontainer.jpg');
+            position: relative;
+            margin: 0 auto;
+            z-index: 1;
+            padding: 7px;
+            border-radius: 24px;
+            overflow-y: scroll;
+            white-space: nowrap;
+            text-align: center;
+            transform: translate(-300px, -790px);
+        }
+
+        .socialscontainerbook {
+            width: 111px;
+            height: 255px;
+            background: url('/assets/booklogsocials.png');
+            position: relative;
+            margin: 0 auto;
+            z-index: 1;
+            padding: 7px;
+            border-radius: 24px;
+            overflow-y: scroll;
+            white-space: nowrap;
+            text-align: center;
+            transform: translate(-300px, -1305px);
+        }
+
+        .socialscontainerinterests {
+            width: 111px;
+            height: 255px;
+            background: url('/assets/interetssocials.png');
+            position: relative;
+            margin: 0 auto;
+            z-index: 1;
+            padding: 7px;
+            border-radius: 24px;
+            overflow-y: scroll;
+            white-space: nowrap;
+            text-align: center;
+            transform: translate(-300px, -1305px);
+        }
+
+        .socialscontainerprojects {
+            width: 111px;
+            height: 255px;
+            background: url('/assets/projectssocials.png');
+            position: relative;
+            margin: 0 auto;
+            z-index: 1;
+            padding: 7px;
+            border-radius: 24px;
+            overflow-y: scroll;
+            white-space: nowrap;
+            text-align: center;
+            transform: translate(-300px, -810px);
+        }
+
+        .navcontainerland {
+            width: 111px;
+            height: 255px;
+            background: url('assets/navcontainer1.jpg');
+            position: relative;
+            margin: 0 auto;
+            z-index: 1;
+            padding: 7px;
+            border-radius: 24px;
+            overflow-y: scroll; 
+            white-space: nowrap;
+            transform: translate(-300px, -675px);
+        }
+
+        .navcontainerbook {
+            width: 111px;
+            height: 255px;
+            background: url('/assets/booklognav.png');
+            position: relative;
+            margin: 0 auto;
+            z-index: 1;
+            padding: 7px;
+            border-radius: 24px;
+            overflow-y: scroll;
+            white-space: nowrap;
+            transform: translate(-300px, -1190px);
+        }
+
+        .navcontainerinterests {
+            width: 111px;
+            height: 255px;
+            background: url('/assets/interestsnav.png');
+            position: relative;
+            margin: 0 auto;
+            z-index: 1;
+            padding: 7px;
+            border-radius: 24px;
+            overflow-y: scroll;
+            white-space: nowrap;
+            transform: translate(-300px, -1190px);
+        }
+
+        .navcontainerprojects {
+            width: 111px;
+            height: 255px;
+            background: url('/assets/projectsnav2.jpg');
+            position: relative;
+            margin: 0 auto;
+            z-index: 1;
+            padding: 7px;
+            border-radius: 24px;
+            overflow-y: scroll;
+            white-space: nowrap;
+            transform: translate(-300px, -705px);
+        }
+
+        h1 {
+            font-family: 'CHNOPixel';
+            color:#46292b;
+        }
+        h2 {
+            font-family: 'CHNOPixel';
+            color:#46292b;
+            position: relative;
+        }
+
+        a {
+            color:#ae696f;
+            font-weight: bold;
+            font-family: 'CHNOPixel';
+        }
+        p {
+            font-family: 'CHNOPixel';
+            color:#46292b; 
+            white-space: nowrap;
+            overflow-y: scroll;
+            overflow-x:auto;
+            overflow-wrap:normal;
+        }
+
+        #homebutton {
+            font-family: "CHNOPixel";
+            background-color: #f3bcc0;
+            border-radius: 24px;
+            color:#46292b;
+            z-index: 2;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            transform: translate(-300px, -895px)
+        }
+
+        #booklogbutton {
+            font-family: 'CHNOPixel';
+            background-color: #f3bcc0;
+            border-radius: 24px;
+            color: #46292b;
+            z-index: 2;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction:column;
+            transform: translate(-300px, -870px)
+        }
+
+        #interestsbutton {
+            font-family: 'CHNOPixel';
+            background-color: #f3bcc0;
+            border-radius: 24px;
+            color: #46292b;
+            z-index: 2;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            transform: translate(-300px, -845px)
+        }
+
+        #projectsbutton {
+            font-family: 'CHNOPixel';
+            background-color: #f3bcc0;
+            border-radius: 24px;
+            color: #46292b;
+            z-index: 2;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            transform: translate(-300px, -820px);
+        }
+
+        #guestbookbutton { 
+            font-family: "CHNOPixel";
+            background-color:rgb(230, 244, 219);
+            border-radius: 24px;
+            color: #46292b;
+            z-index: 2;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            transform: translate(-300px, -550px);
+        }
+
+         #homebutton1 {
+            font-family: "CHNOPixel";
+            background-color: #f3bcc0;
+            border-radius: 24px;
+            color:#46292b;
+            z-index: 2;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            transform: translate(-300px, -1410px)
+        }
+
+        #booklogbutton1 {
+            font-family: 'CHNOPixel';
+            background-color: #f3bcc0;
+            border-radius: 24px;
+            color: #46292b;
+            z-index: 2;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction:column;
+            transform: translate(-300px, -1385px)
+        }
+
+        #interestsbutton1 {
+            font-family: 'CHNOPixel';
+            background-color: #f3bcc0;
+            border-radius: 24px;
+            color: #46292b;
+            z-index: 2;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            transform: translate(-300px, -1360px)
+
+        }
+
+        #projectsbutton1 {
+            font-family: 'CHNOPixel';
+            background-color: #f3bcc0;
+            border-radius: 24px;
+            color: #46292b;
+            z-index: 2;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            transform: translate(-300px, -1335px);
+        }
+
+        #guestbookbutton1 { 
+            font-family: "CHNOPixel";
+            background-color:rgb(230, 244, 219);
+            border-radius: 24px;
+            color: #46292b;
+            z-index: 2;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            transform: translate(-300px, -1065px);
+        }
+
+         #homebutton2 {
+            font-family: "CHNOPixel";
+            background-color: #f3bcc0;
+            border-radius: 24px;
+            color:#46292b;
+            z-index: 2;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            transform: translate(-300px, -1410px)
+        }
+
+        #booklogbutton2 {
+            font-family: 'CHNOPixel';
+            background-color: #f3bcc0;
+            border-radius: 24px;
+            color: #46292b;
+            z-index: 2;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction:column;
+            transform: translate(-300px, -1385px)
+        }
+
+        #interestsbutton2 {
+            font-family: 'CHNOPixel';
+            background-color: #f3bcc0;
+            border-radius: 24px;
+            color: #46292b;
+            z-index: 2;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            transform: translate(-300px, -1360px)
+
+        }
+
+        #projectsbutton2 {
+            font-family: 'CHNOPixel';
+            background-color: #f3bcc0;
+            border-radius: 24px;
+            color: #46292b;
+            z-index: 2;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            transform: translate(-300px, -1335px);
+        }
+
+        #guestbookbutton2 { 
+            font-family: "CHNOPixel";
+            background-color:rgb(230, 244, 219);
+            border-radius: 24px;
+            color: #46292b;
+            z-index: 2;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            transform: translate(-300px, -1065px);
+        }
+
+         #homebutton3 {
+            font-family: "CHNOPixel";
+            background-color: #f3bcc0;
+            border-radius: 24px;
+            color:#46292b;
+            z-index: 2;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            transform: translate(-300px, -915px)
+        }
+
+        #booklogbutton3 {
+            font-family: 'CHNOPixel';
+            background-color: #f3bcc0;
+            border-radius: 24px;
+            color: #46292b;
+            z-index: 2;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction:column;
+            transform: translate(-300px, -890px)
+        }
+
+        #interestsbutton3 {
+            font-family: 'CHNOPixel';
+            background-color: #f3bcc0;
+            border-radius: 24px;
+            color: #46292b;
+            z-index: 2;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            transform: translate(-300px, -865px)
+
+        }
+
+        #projectsbutton3 {
+            font-family: 'CHNOPixel';
+            background-color: #f3bcc0;
+            border-radius: 24px;
+            color: #46292b;
+            z-index: 2;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            transform: translate(-300px, -840px);
+        }
+
+        #guestbookbutton3 { 
+            font-family: "CHNOPixel";
+            background-color:rgb(230, 244, 219);
+            border-radius: 24px;
+            color: #46292b;
+            z-index: 2;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            transform: translate(-300px, -550px);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #placeholder{
+            font-family: 'CHNOPixel';
+            background-color: #f3bcc0;
+            border-radius: 24px;
+            color: #46292b;
+            z-index: 2;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            transform: translate(25px, -600px)
+        }
+
+    </style>
+    <style>
+            #musicplayer{
+                font-family: 'CHNOPixel';
+                background:rgb(249, 255, 244); /* background color of player */
+                border:4px solid #93B078; /* border around player */
+                width:200px; /* width of the player - make it 100% if you want it to fill your container */
+                padding:10px;
+                text-align:center; 
+                display:flex;
+                flex-direction:column;
+                gap:10px;
+                border-radius: 24px;
+                position: relative;
+                z-index: 2;
+                margin: 0 auto;
+                transform: translate(400px, 825px);
+                color:#46292b;
+
+            }
+ 
+            .songtitle, .track-info, .now-playing{
+                padding:5px;
+            }
+ 
+            .controls{
+                display:flex; 
+                flex-direction:column; 
+                gap:10px;
+            }
+ 
+            .buttons{
+                display:flex;
+                justify-content:center;
+                font-size:17px !important; /* size of controls */
+                width:100%;
+            }
+ 
+            .buttons div{
+                width:33.3%;
+            }
+ 
+            .playpause-track, .prev-track, .next-track{
+                color:#D98990; /* color of buttons */
+                font-size:35px !important; /* size of buttons */
+            }
+ 
+            .volume-icon{
+                font-size:0px !important; /* size of volume icon */
+            }
+ 
+            .seeking, .volume{
+                display:flex;
+                flex-direction:row;
+                align-items:center;
+                gap:5px;
+            }
+ 
+            .now-playing, .track-info{
+                background-color:#ddf6cd; /* background color of top two boxes */
+            }
+ 
+            .now-playing{
+                font-weight:bold;
+            }
+ 
+            input[type=range]{
+                -webkit-appearance: none; /* removes default appearance of the tracks */
+                width:100%;
+            }
+ 
+            input[type=range]:focus{
+                outline:none; /* removes outline around tracks when focusing */
+            }
+ 
+            input[type=range]::-webkit-slider-runnable-track{
+                width:100%;
+                height:4px; /* thickness of seeking track */
+                background:#D98990; /* color of seeking track */
+            }
+ 
+            input[type=range]::-webkit-slider-thumb{
+                height:10px; /* height of seeking square */
+                width:10px; /* width of seeking square */
+                border-radius:0px; /* change to 5px if you want a circle seeker */
+                background:#D98990; /* color of seeker square */
+                -webkit-appearance:none;
+                margin-top:-3px; /* fixes the weird margin around the seeker square in chrome */
+            }
+ 
+            input[type=range]::-moz-range-track{
+                width:100%;
+                height:4px; /* thickness of seeking track */
+                background:#D98990; /* color of seeking track */
+            }
+ 
+            input[type=range]::-moz-range-thumb{
+                height:10px; /* height of seeking square */
+                width:10px; /* width of seeking square */
+                border-radius:0px; /* change to 5px if you want a circle seeker */
+                background:#D98990; /* color of seeker square */
+                border:none; /* removes weird border around seeker square in firefox */
+            }
+        </style>
+    </head>
+    <body>
+        <audio id = "click" src = "https://od.lk/s/OTRfMTQxNDMxNzcxXw/clickclick.wav" preload - "auto"></audio>
+        <div id="musicplayer">
+            <div class="now-playing">playing 1 of 2</div>
+ 
+            <div class="track-info">
+                <div class="track-name">Song Name</div>
+                <div class="track-artist"></div>
+            </div>
+ 
+            <div class="controls">
+                <div class="seeking">
+                    <div class="current-time">00:00</div>
+ 
+                    <input type="range" min="1" max="100" value="0" class="seek_slider" onchange="seekTo()">
+ 
+                    <div class="total-duration">0:00</div>
+                </div>
+ 
+                <div class="buttons">
+                    <div class="prev-track" onclick="prevTrack()">&#171;</div>
+ 
+                    <div class="playpause-track" onclick="playpauseTrack()">&#9654;</div>
+ 
+                    <div class="next-track" onclick="nextTrack()">&#187;</div>
+                </div>
+ 
+                <div class="volume">
+                    <div class="volume-icon">&#128362;</div>
+                    <input type="range" min="1" max="100" value="25" class="volume_slider" onchange="setVolume()"> <!-- the default volume value is 25, change this if you want it to be higher or lower (i wouldn't recommend it bc it gets really loud) -->
+                </div>
+            </div>
+ 
+            <audio id="music" src=""></audio>
+        </div>
+        <script>
+            // initiate variables
+            let now_playing = document.querySelector(".now-playing");
+            let track_name = document.querySelector(".track-name");
+            let track_artist = document.querySelector(".track-artist");
+ 
+ 
+            let playpause_btn = document.querySelector(".playpause-track");
+            let next_btn = document.querySelector(".next-track");
+            let prev_btn = document.querySelector(".prev-track");
+ 
+            let seek_slider = document.querySelector(".seek_slider");
+            let volume_slider = document.querySelector(".volume_slider");
+            let curr_time = document.querySelector(".current-time");
+            let total_duration = document.querySelector(".total-duration");
+ 
+            let track_index = 0;
+            let isPlaying = false;
+            let updateTimer;
+ 
+            // create new audio element
+            let curr_track = document.getElementById("music");
+ 
+            //
+            // DEFINE YOUR SONGS HERE!!!!!
+            // MORE THAN FOUR SONGS CAN BE ADDED!!
+            // JUST ADD ANOTHER BRACKET WITH NAME ARTIST AND PATH
+            // CATBOX.MOE IS RECOMMENDED FOR UPLOADING MP3 FILES IF YOU DON'T HAVE NEOCITIES SUPPORTER
+            let track_list = [
+                {
+                    name:"see u soon",
+                    artist:"beabadoobee",
+                    path:"https://od.lk/s/OTRfMTQxNDI4MTg2Xw/SeeYouSoon.mp3"
+                },
+
+                {
+                    name:"rewind",
+                    artist:"wonder girls",
+                    path:"https://od.lk/s/OTRfMTQxNDI4MTE1Xw/Rewind.mp3"
+                },
+
+                {
+                    name:"october",
+                    artist:"the crane wives",
+                    path:"https://od.lk/s/OTRfMTQxNDI4MTU0Xw/October.mp3"
+                },
+            ];
+            //
+            //
+            //
+            //
+            //
+ 
+            function loadTrack(track_index){
+                clearInterval(updateTimer);
+                resetValues();
+ 
+                // load a new track
+                curr_track.src = track_list[track_index].path;
+                curr_track.load();
+ 
+                // update details of the track
+                track_name.textContent = track_list[track_index].name;
+                track_artist.textContent = track_list[track_index].artist;
+                now_playing.textContent = "Playing " + (track_index + 1) + " of " + track_list.length;
+ 
+                // set an interval of 1000 milliseconds for updating the seek slider
+                updateTimer = setInterval(seekUpdate, 1000);
+ 
+                // move to the next track if the current one finishes playing 
+                curr_track.addEventListener("ended", nextTrack);
+ 
+            }
+ 
+            // reset values
+            function resetValues(){
+                curr_time.textContent = "0:00";
+                total_duration.textContent = "0:00";
+                seek_slider.value = 0;
+            }
+ 
+            // load the first track in the tracklist
+            loadTrack(track_index);
+ 
+            // checks if song is playing
+            function playpauseTrack(){
+                if (!isPlaying) playTrack();
+                else pauseTrack();
+            }
+ 
+            // plays track when play button is pressed
+            function playTrack(){
+                curr_track.play();
+                isPlaying = true;
+ 
+                // replace icon with the pause icon
+                playpause_btn.innerHTML = '&#x23F8';
+            }
+ 
+            // pauses track when pause button is pressed
+            function pauseTrack(){
+                curr_track.pause();
+                isPlaying = false;
+ 
+                playpause_btn.innerHTML = '&#x23F8';
+            }
+ 
+            // moves to the next track
+            function nextTrack(){
+                if (track_index < track_list.length - 1)
+                    track_index += 1;
+                else track_index = 0;
+                loadTrack(track_index);
+                playTrack();
+            }
+ 
+            // moves to the previous track
+            function prevTrack(){
+                if (track_index > 0)
+                    track_index -= 1;
+                else track_index = track_list.length;
+                loadTrack(track_index);
+                playTrack();
+            }
+ 
+            // seeker slider
+            function seekTo(){
+                seekto = curr_track.duration * (seek_slider.value / 100);
+                curr_track.currentTime = seekto;
+            }
+ 
+            // volume slider
+            function setVolume(){
+                curr_track.volume = volume_slider.value / 100;
+            }
+ 
+            setVolume();
+ 
+            function seekUpdate(){
+                let seekPosition = 0;
+ 
+                // check if the current track duration is a legible number
+                if (!isNaN(curr_track.duration)){
+                    seekPosition = curr_track.currentTime * (100 / curr_track.duration);
+                    seek_slider.value = seekPosition;
+ 
+                    // calculate the time left and the total duration
+                    let currentMinutes = Math.floor(curr_track.currentTime / 60);
+                    let currentSeconds = Math.floor(curr_track.currentTime - currentMinutes * 60);
+                    let durationMinutes = Math.floor(curr_track.duration / 60);
+                    let durationSeconds = Math.floor(curr_track.duration - durationMinutes * 60);
+ 
+                    // adding a zero to the single digit time values
+                    if (currentSeconds < 10){ currentSeconds = "0" + currentSeconds; }
+                    if (durationSeconds < 10){ durationSeconds = "0" + durationSeconds; }
+                    if (currentMinutes < 10){ currentMinutes = currentMinutes; }
+                    if (durationMinutes < 10){ durationMinutes = durationMinutes; }
+ 
+                    curr_time.textContent = currentMinutes + ":" + currentSeconds;
+                    total_duration.textContent = durationMinutes + ":" + durationSeconds;
+                }
+            }
+        </script>
+    <section id = "landingScreen">
+    <div class = "maincontainer"></div>
+        <div class = "headercontainerland"><h1>home page !! ^-^</h1></div>
+        <div class = "navcontainerland"></div>
+            <button onclick = "playClickSound(); changeScreen('landingScreen')" id = "homebutton">home</button>
+            <button onclick = "playClickSound(); changeScreen('bookLogScreen')" id = "booklogbutton">book log</button>
+            <button onclick = "playClickSound(); changeScreen('interestsScreen')" id = "interestsbutton">interest</button>
+            <button onclick = "playClickSound(); changeScreen('projectsScreen')" id = "projectsbutton">projects</button>
+            <button onclick = "playClickSound()" id= "guestbookbutton"><a href = "https://brookiebug333.atabook.org/?page=1" target = "_blank">comment!</a></button>
+        <div class = "socialscontainerland"> 
+            <p><b>my socials:</b></p>
+            <br><a href = "https://www.instagram.com/brookiebug333/" target = "_blank">insta</a> <br><br>
+            <a href = "https://discordapp.com/users/1074510671082946570" target = "_blank">discord</a> <br><br>
+            <a href = "https://open.spotify.com/user/31h66rzicxqmpn55qsjkplfdh6d4?si=4ccf2861b3d0490d" target = "_blank">spotify</a>
+        </div>
+        <div class = "abtmecontainer">
+            <h2>
+                <b><em>about me :3</em></b>
+            </h2> 
+            <p> 
+                last web update: 03/24/26 <br><br>  
+                haiii, my name is brookie !!<br>
+                i'm 7teen, my b-day is 04/29<br>
+                according to the mbti personality test, i'm an infp/j<br>
+                this is my first time building a website by myself, so<br>
+                please be nice / give *constructive* criticism pls !!<br>
+                also, ignore any spelling errors... english isn't my<br>
+                strong suit lol T^T<br>
+                i plan to use this space as a way to freely espress<br>
+                myself via coding and show off other things i've been<br>
+                cooking up, such as hardware projects, paintings, music,<br>
+                theories for shows i'm interested in, recent reads, and<br>
+                probably lots more in the future !!<br>
+                i'm commited to Colorado School of Mines, and planning on<br>
+                studying either ChemE or Quantitative Biosciences and <br>
+                Engineering ( eek !! i can't deicde !! )<br>
+                i'm planning on adding a chat feature to allow those who<br>
+                stumble here to leave little comments !! if any1 has tips<br>
+                4 that hmu ToT<br>
+                i added some of my fav songs for u to jam to while <br>
+                on here !! <br>
+                i also linked my socials in case anyone is curious abt  <br>
+                who i am, but i will note i'm most active on insta !! but <br>
+                no posts yet rip X-X<br>
+                anyways, i'll stop yapping your ear off and let you<br>
+                 exploremy digital home !!<br>
+                please enjoy :D<br>
+                <br><br>
+                sincerely,<br>
+                brookiebug333<br>
+
+             </p>
+        </div>
+    </div>
+    </section>
+    <section id = "bookLogScreen" class = "hidden">
+        <div class = "maincontainer"></div>
+        <div class = "headercontainerbook"><h1>my book log</h1></div>
+        <div class = "bookcontainer">
+            <img src = '/assets/myyearofrest.jpg' id = "bookimg1"></img>
+            <div id = "bookrating1">
+                <br>
+                   really encapsulates the depths of
+                   depression and the toll it can take
+                   on you. not only that, but the 
+                   ending takes you for a LOOP and it
+                   really feels like it was written
+                   from experience. showcases substance
+                   abuse in a way that personally feels
+                   realistic, as well as demonstrates
+                   the effects of losing your life to 
+                   mental health issues without 
+                   glamorizing or demonizing it !!
+                   <br>
+                   7/10
+                <br>
+            </div>
+        </div>
+            <div class = "navcontainerbook"></div>
+                <button onclick = "playClickSound(); changeScreen('landingScreen')" id = "homebutton1">home</button>
+                <button onclick = "playClickSound(); changeScreen('bookLogScreen')" id = "booklogbutton1">book log</button>
+                <button onclick = "playClickSound(); changeScreen('interestsScreen')" id = "interestsbutton1">interest</button>
+                <button onclick = "playClickSound(); changeScreen('projectsScreen')" id = "projectsbutton1">projects</button>
+                <button onclick = "playClickSound()" id= "guestbookbutton1"><a href = "https://brookiebug333.atabook.org/?page=1" target = "_blank">comment!</a></button>
+            <div class = "socialscontainerbook"> 
+                <p><b>my socials:</b></p>
+                <br><a href = "https://www.instagram.com/brookiebug333/" target = "_blank">insta</a> <br><br>
+                <a href = "https://discordapp.com/users/1074510671082946570" target = "_blank">discord</a> <br><br>
+                <a href = "https://open.spotify.com/user/31h66rzicxqmpn55qsjkplfdh6d4?si=4ccf2861b3d0490d" target = "_blank">spotify</a>
+            </div>
+    </section>
+    <section id = "interestsScreen" class = "hidden">
+    <div class = "maincontainer">
+    </div>
+    <div class = "headercontainerinterests"><h1>my interests</h1></div>
+    <div class = "interestscontainer">
+        <img src = "/assets/tadcinterests.jpg"  class = "over" id="tadcint">
+        <img src = "/assets/ladybuginterests.jpg" class = "over" id = "ladybugint">
+        <img src = "/assets/snoopyinterests.jpg" class = "over" id = "snoopyint">
+        <img src = "/assets/STEMinterests.jpg" class = "over" id = "STEMint">
+        <img src = "/assets/artinterests.jpg" class = "over" id = "artint">
+        <img src = "/assets/evangelioninterests.jpg" class = "over" id = "evaint">
+        <img src = "/assets/musicinterests.jpg" class = "over" id = "musicint">
+        <button id = "tadcbutton">tadc</button>
+        <button id = "ladybugbutton">ladybugs</button>
+        <button id = "snoopybutton">snoopy</button>
+        <button id = "STEMbutton">STEM</button>
+        <button id = "artbutton">art</button>
+        <button id = "evabutton">evangelion</button>
+        <button id = "musicbutton">music</button>
+    </div>
+        <div class = "navcontainerinterests"></div>
+            <button onclick = "playClickSound(); changeScreen('landingScreen')" id = "homebutton2">home</button>
+            <button onclick = "playClickSound(); changeScreen('bookLogScreen')" id = "booklogbutton2">book log</button>
+            <button onclick = "playClickSound(); changeScreen('interestsScreen')" id = "interestsbutton2">interest</button>
+            <button onclick = "playClickSound(); changeScreen('projectsScreen')" id = "projectsbutton2">projects</button>
+            <button onclick = "playClickSound()" id= "guestbookbutton2"><a href = "https://brookiebug333.atabook.org/?page=1" target = "_blank">comment!</a></button>
+        <div class = "socialscontainerinterests"> 
+            <p><b>my socials:</b></p>
+            <br><a href = "https://www.instagram.com/brookiebug333/" target = "_blank">insta</a> <br><br>
+            <a href = "https://discordapp.com/users/1074510671082946570" target = "_blank">discord</a> <br><br>
+            <a href = "https://open.spotify.com/user/31h66rzicxqmpn55qsjkplfdh6d4?si=4ccf2861b3d0490d" target = "_blank">spotify</a>
+        </div>
+    </section>
+        <section id = "projectsScreen" class = "hidden">
+    <div class = "maincontainer"></div>
+    <div class = "headercontainerprojects"><h1>recent projects</h1></div>
+    <button id = "placeholder">none yet, come again soon :D</button>
+        <div class = "navcontainerprojects"></div>
+            <button onclick = "playClickSound(); changeScreen('landingScreen')" id = "homebutton3">home</button>
+            <button onclick = "playClickSound(); changeScreen('bookLogScreen')" id = "booklogbutton3">book log</button>
+            <button onclick = "playClickSound(); changeScreen('interestsScreen')" id = "interestsbutton3">interest</button>
+            <button onclick = "playClickSound(); changeScreen('projectsScreen')" id = "projectsbutton3">projects</button>
+            <button onclick = "playClickSound()" id= "guestbookbutton3"><a href = "https://brookiebug333.atabook.org/?page=1" target = "_blank">comment!</a></button>
+        <div class = "socialscontainerprojects"> 
+            <p><b>my socials:</b></p>
+            <br><a href = "https://www.instagram.com/brookiebug333/" target = "_blank">insta</a> <br><br>
+            <a href = "https://discordapp.com/users/1074510671082946570" target = "_blank">discord</a> <br><br>
+            <a href = "https://open.spotify.com/user/31h66rzicxqmpn55qsjkplfdh6d4?si=4ccf2861b3d0490d" target = "_blank">spotify</a>
+        </div>
+    </section>
+
+    <script src="main.js"></script>
+</body>
+</html>
